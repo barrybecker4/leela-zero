@@ -20,8 +20,6 @@
 #include <cassert>
 #include <cstddef>
 #include <gtest/gtest.h>
-#include <limits>
-#include <vector>
 
 #include "FastBoard.h" 
 
@@ -240,7 +238,7 @@ TEST(FastBoardTest, IsSuicideWhenNotForBlack) {
 }
 
 // Results will make more sense in FullBuard test
-TEST(FastBoardTest, IsSuicideWhenForBlackInAllWhiteField) {
+TEST(FastBoardTest, IsSuicideForBlackInAllWhiteField) {
     FastBoard b = create_5x5_all_white_field();
 
     EXPECT_EQ(false, b.is_suicide(b.get_vertex(1, 1), FastBoard::BLACK));
