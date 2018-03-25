@@ -23,7 +23,7 @@
 
 #include "FullBoard.h" 
 
-FullBoard create_full_3x3() {
+FullBoard create_full_filled_3x3() {
     FullBoard b;
     b.reset_board(3);
     b.update_board(FastBoard::BLACK, b.get_vertex(1, 1));
@@ -34,7 +34,16 @@ FullBoard create_full_3x3() {
     return b;
   }
 
-FullBoard create_full_5x5() {
+/*
+      a b c d e
+    5 . . O . .  5
+    4 X . O . .  4
+    3 . . O X .  3
+    2 . X X O .  2
+    1 . . . . .  1
+      a b c d e
+*/
+FullBoard create_semi_filled_5x5() {
     FullBoard b;
     b.reset_board(5);
     b.update_board(FastBoard::BLACK, b.get_vertex(1, 1));
@@ -48,7 +57,65 @@ FullBoard create_full_5x5() {
     return b;
 }
 
-FullBoard create_full_9x9() {
+/**
+       a b c d e 
+     5 . . O . O  5
+     4 X . O O X  4
+     3 X O O X .  3
+     2 . X X O .  2
+     1 O X . X .  1
+       a b c d e 
+ */
+FullBoard create_full_filled_5x5() {
+    FullBoard b;
+    b.reset_board(5);
+    b.update_board(FastBoard::BLACK, b.get_vertex(1, 1));
+    b.update_board(FastBoard::BLACK, b.get_vertex(2, 1));
+    b.update_board(FastBoard::WHITE, b.get_vertex(3, 1));
+    b.update_board(FastBoard::WHITE, b.get_vertex(2, 2));
+    b.update_board(FastBoard::BLACK, b.get_vertex(3, 2));
+    b.update_board(FastBoard::BLACK, b.get_vertex(0, 3));
+    b.update_board(FastBoard::WHITE, b.get_vertex(2, 3));
+    b.update_board(FastBoard::WHITE, b.get_vertex(2, 4));
+    b.update_board(FastBoard::WHITE, b.get_vertex(3, 3));
+    b.update_board(FastBoard::WHITE, b.get_vertex(4, 4));
+    b.update_board(FastBoard::BLACK, b.get_vertex(4, 3));
+    b.update_board(FastBoard::WHITE, b.get_vertex(1, 2));
+    b.update_board(FastBoard::BLACK, b.get_vertex(0, 2));
+    b.update_board(FastBoard::WHITE, b.get_vertex(0, 0));
+    b.update_board(FastBoard::BLACK, b.get_vertex(1, 0));
+    b.update_board(FastBoard::BLACK, b.get_vertex(3, 0));
+    return b;
+}
+
+/*
+         a b c d e
+       5 X . X X .  5
+       4 . . X . X  4
+       3 X X . X .  3
+       2 . O X O .  2
+       1 . . . . .  1
+         a b c d e
+*/
+FullBoard create_5x5_all_black() {
+    FullBoard b;
+    b.reset_board(5);
+    b.update_board(FastBoard::BLACK, b.get_vertex(1, 2));
+    b.update_board(FastBoard::BLACK, b.get_vertex(2, 1));
+    b.update_board(FastBoard::BLACK, b.get_vertex(0, 4));
+    b.update_board(FastBoard::BLACK, b.get_vertex(2, 3));
+    b.update_board(FastBoard::BLACK, b.get_vertex(2, 4));
+    b.update_board(FastBoard::BLACK, b.get_vertex(2, 4));
+    b.update_board(FastBoard::BLACK, b.get_vertex(3, 2));
+    b.update_board(FastBoard::BLACK, b.get_vertex(3, 4));
+    b.update_board(FastBoard::BLACK, b.get_vertex(4, 3));
+    b.update_board(FastBoard::BLACK, b.get_vertex(0, 2));
+    b.update_board(FastBoard::WHITE, b.get_vertex(1, 1));
+    b.update_board(FastBoard::WHITE, b.get_vertex(3, 1));
+    return b;
+}
+
+FullBoard create_semi_filled_9x9() {
     FullBoard b;
     b.reset_board(9);
     b.update_board(FastBoard::WHITE, b.get_vertex(5, 4));
@@ -105,8 +172,8 @@ TEST(FullBoardTest, Board3x3) {
     EXPECT_EQ(3, b.get_boardsize());
 }
 
-TEST(FullBoardTest, SemiFilled5x5Board) {
-    FullBoard b = create_full_5x5();
+TEST(FullBoardTest, SerializeSemiFilled5x5Board) {
+    FullBoard b = create_semi_filled_5x5();
     
     const char *expected = "\n"
         "   a b c d e \n"
@@ -120,8 +187,39 @@ TEST(FullBoardTest, SemiFilled5x5Board) {
     EXPECT_EQ(expected,  b.serialize_board());
 }
 
+TEST(FullBoardTest, SerializeFilled5x5Board) {
+    FullBoard b = create_full_filled_5x5();
+    
+    const char *expected = "\n"
+        "   a b c d e \n"
+        " 5 . . O . O  5\n"
+        " 4 X . O O X  4\n"
+        " 3 X O O X .  3\n"
+        " 2 . X X O .  2\n"
+        " 1 O X . X .  1\n"
+        "   a b c d e \n\n";
+    
+    EXPECT_EQ(expected,  b.serialize_board());
+}
+
+TEST(FullBoardTest, SerializeAllBlack5x5Board) {
+    FullBoard b = create_5x5_all_black();
+    
+    const char *expected = "\n"
+        "   a b c d e \n"
+        " 5 X . X X .  5\n"
+        " 4 . . X . X  4\n"
+        " 3 X X . X .  3\n"
+        " 2 . O X O .  2\n"
+        " 1 . . . . .  1\n"
+        "   a b c d e \n\n";
+    
+    EXPECT_EQ(expected,  b.serialize_board());
+}
+
+
 TEST(FullBoardTest, CountRealLibertiesOn5x5) {
-    FullBoard b = create_full_5x5();
+    FullBoard b = create_semi_filled_5x5();
     EXPECT_EQ(2, b.count_pliberties(b.get_vertex(0, 0)));
     EXPECT_EQ(3, b.count_pliberties(b.get_vertex(1, 1)));
     EXPECT_EQ(1, b.count_pliberties(b.get_vertex(2, 1)));
@@ -133,7 +231,7 @@ TEST(FullBoardTest, CountRealLibertiesOn5x5) {
 }
 
 TEST(FullBoardTest, SemiFilled9x9Board) {
-    FullBoard b = create_full_9x9();
+    FullBoard b = create_semi_filled_9x9();
     
     const char *expected = "\n"
         "   a b c d e f g h j \n"
@@ -152,7 +250,7 @@ TEST(FullBoardTest, SemiFilled9x9Board) {
 }
 
 TEST(FullBoardTest, RemoveString) {
-    FullBoard b = create_full_9x9();
+    FullBoard b = create_semi_filled_9x9();
     b.remove_string(b.get_vertex(1, 2));
     
     const char *expected = "\n"
@@ -172,7 +270,7 @@ TEST(FullBoardTest, RemoveString) {
 }
 
 TEST(FullBoardTest, CountRealLibertiesOn9x9) {
-    FullBoard b = create_full_5x5();
+    FullBoard b = create_semi_filled_5x5();
     
     EXPECT_EQ(2, b.count_pliberties(b.get_vertex(0, 0)));
     EXPECT_EQ(2, b.count_pliberties(b.get_vertex(1, 2)));
@@ -200,7 +298,7 @@ TEST(FullBoardTest, IsSuicideForBlackInAllWhiteField) {
 }
 
 TEST(FullBoardTest, CalcAreaScore) {
-    FullBoard b = create_full_5x5();
+    FullBoard b = create_semi_filled_5x5();
     EXPECT_EQ(-6.5, b.area_score(6.5F)); 
     EXPECT_EQ(-.5, b.area_score(0.5F));
     EXPECT_EQ(-9.0, b.area_score(9.0F)); 
@@ -214,21 +312,119 @@ TEST(FullBoardTest, CalcAreaScoreOnWhiteField) {
 }
 
 TEST(FullBoardTest, CalcAreaScoreOnSemiFilled9x9) {
-    FullBoard b = create_full_9x9();
+    FullBoard b = create_semi_filled_9x9();
     EXPECT_EQ(-9.5, b.area_score(6.5F)); 
     EXPECT_EQ(-3.5, b.area_score(0.5F));
     EXPECT_EQ(-12.0, b.area_score(9.0F)); 
 }
 
+TEST(FullBoardTest, WhiteToMove) {
+    FullBoard b = create_semi_filled_5x5();
+    EXPECT_EQ(FastBoard::BLACK, b.get_to_move());
+    EXPECT_EQ(8162750142217023897u, b.get_hash());
+    
+    b.set_to_move(FastBoard::WHITE);
+    EXPECT_EQ(FastBoard::WHITE, b.get_to_move());
+    EXPECT_EQ(15747471392336042580u, b.get_hash());
+}
+
+TEST(FullBoardTest, BlackToMove) {
+    FullBoard b = create_semi_filled_5x5();
+    b.set_to_move(FastBoard::WHITE);
+    EXPECT_EQ(FastBoard::WHITE, b.get_to_move());
+    EXPECT_EQ(15747471392336042580u, b.get_hash());
+    
+    b.set_to_move(FastBoard::BLACK);
+    EXPECT_EQ(FastBoard::BLACK, b.get_to_move());
+    EXPECT_EQ(8162750142217023897u, b.get_hash());
+}
+
 TEST(FullBoardTest, CalcHash9x9) {
-    FullBoard b = create_full_9x9();
+    FullBoard b = create_semi_filled_9x9();
     EXPECT_EQ(10841953875953604838u, b.calc_hash()); 
     EXPECT_EQ(16342085426476978742u, b.calc_hash(b.get_vertex(2, 3))); 
     EXPECT_EQ(10275374004301650050u, b.calc_hash(b.get_vertex(1, 1))); 
 }
 
 TEST(FullBoardTest, CalcKoHash9x9) {
-    FullBoard b = create_full_9x9();
+    FullBoard b = create_semi_filled_9x9();
     EXPECT_EQ(15992831752030735207u, b.calc_ko_hash()); 
-    
+}
+
+TEST(FullBoardTest, GetString) {
+    FullBoard b = create_full_filled_5x5();
+    EXPECT_EQ("C2 B1 B2", b.get_string(b.get_vertex(1, 1)));
+    EXPECT_EQ("C4 B3 D4 C5 C3", b.get_string(b.get_vertex(2, 2)));
+}
+
+
+/*
+  Only single points surrounded by own color are counted as eyes.
+   
+      a b c d e
+    5 . . O O .  5
+    4 . . O . O  4
+    3 O O O O .  3
+    2 . . O . .  2
+    1 . . O . .  1
+      a b c d e
+*/
+TEST(FullBoardTest, IsEyeOnWhiteField) {
+    FullBoard b = create_5x5_all_white();
+    EXPECT_EQ(true, b.is_eye(FastBoard::WHITE, b.get_vertex(4, 4)));
+    EXPECT_EQ(true, b.is_eye(FastBoard::WHITE, b.get_vertex(3, 3)));
+    EXPECT_EQ(true, b.is_eye(FastBoard::WHITE, b.get_vertex(2, 2))); // not eye because its filled
+    EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(1, 1))); // not a single point eye
+    EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(1, 4))); // not a single point eye
+    EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(2, 0)));
+    EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(4, 2))); // not surrounded on 4 sides
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(3, 3)));
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(2, 2)));
+}
+
+/*
+  Only single points surrounded by own color are counted as eyes.
+   
+      a b c d e
+    5 X . X X .  5
+    4 . . X . X  4
+    3 X X . X .  3
+    2 . O X O .  2
+    1 . . . . .  1
+      a b c d e
+*/
+TEST(FullBoardTest, IsEyeOnBlackField) {
+    FullBoard b = create_5x5_all_black();
+    EXPECT_EQ(true, b.is_eye(FastBoard::BLACK, b.get_vertex(4, 4)));
+    EXPECT_EQ(true, b.is_eye(FastBoard::BLACK, b.get_vertex(3, 3))); // black eye
+    EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(3, 3))); // not whte eye
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(2, 2))); // potentially false eye
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(1, 1))); 
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(0, 3))); 
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(1, 3))); // not single point eye
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(4, 2)));
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(3, 0)));
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(1, 1)));
+    EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(1, 1)));
+    EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(2, 0)));
+    EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(4, 2)));
+    EXPECT_EQ(true, b.is_eye(FastBoard::BLACK, b.get_vertex(1, 4))); // should not be eye?
+}
+
+/*
+       a b c d e 
+     5 . . O . O  5
+     4 X . O O X  4
+     3 X O O X .  3
+     2 . X X O .  2
+     1 O X . X .  1
+       a b c d e 
+*/
+TEST(FullBoardTest, IsEyeOnFull5x5) {
+    FullBoard b = create_full_filled_5x5();
+    EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(3, 4))); // false eye
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(4, 2))); // false eye
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(2, 0)));
+    EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(0, 2)));
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(3, 1)));
 }
