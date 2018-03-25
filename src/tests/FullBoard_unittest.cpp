@@ -151,6 +151,26 @@ TEST(FullBoardTest, SemiFilled9x9Board) {
     EXPECT_EQ(expected,  b.serialize_board());
 }
 
+TEST(FullBoardTest, RemoveString) {
+    FullBoard b = create_full_9x9();
+    b.remove_string(b.get_vertex(1, 2));
+    
+    const char *expected = "\n"
+        "   a b c d e f g h j \n"
+        " 9 . . . . . . . . .  9\n"
+        " 8 . . . . . . . . .  8\n"
+        " 7 . . + . + . O . .  7\n"
+        " 6 . . . . O . . . .  6\n"
+        " 5 . . + . + O + . .  5\n"
+        " 4 . . . . O . O . .  4\n"
+        " 3 . . + . + O + . .  3\n"
+        " 2 . . . . . . . . .  2\n"
+        " 1 X . . . . . . . .  1\n"
+        "   a b c d e f g h j \n\n";
+    
+    EXPECT_EQ(expected,  b.serialize_board());
+}
+
 TEST(FullBoardTest, CountRealLibertiesOn9x9) {
     FullBoard b = create_full_5x5();
     
@@ -198,4 +218,17 @@ TEST(FullBoardTest, CalcAreaScoreOnSemiFilled9x9) {
     EXPECT_EQ(-9.5, b.area_score(6.5F)); 
     EXPECT_EQ(-3.5, b.area_score(0.5F));
     EXPECT_EQ(-12.0, b.area_score(9.0F)); 
+}
+
+TEST(FullBoardTest, CalcHash9x9) {
+    FullBoard b = create_full_9x9();
+    EXPECT_EQ(10841953875953604838u, b.calc_hash()); 
+    EXPECT_EQ(16342085426476978742u, b.calc_hash(b.get_vertex(2, 3))); 
+    EXPECT_EQ(10275374004301650050u, b.calc_hash(b.get_vertex(1, 1))); 
+}
+
+TEST(FullBoardTest, CalcKoHash9x9) {
+    FullBoard b = create_full_9x9();
+    EXPECT_EQ(15992831752030735207u, b.calc_ko_hash()); 
+    
 }
