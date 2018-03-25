@@ -428,3 +428,19 @@ TEST(FullBoardTest, IsEyeOnFull5x5) {
     EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(0, 2)));
     EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(3, 1)));
 }
+
+TEST(FullBoardTest, GetPrisonersWhenBlackPrisoner) {
+    FullBoard b = create_full_filled_5x5();
+    EXPECT_EQ(0, b.get_prisoners(FastBoard::WHITE));
+    EXPECT_EQ(0, b.get_prisoners(FastBoard::BLACK));
+    
+    b.update_board(FastBoard::BLACK, b.get_vertex(3, 4)); // this captures a white stone
+    EXPECT_EQ(0, b.get_prisoners(FastBoard::WHITE));
+    EXPECT_EQ(1, b.get_prisoners(FastBoard::BLACK));
+}
+
+TEST(FullBoardTest, GetPrisonersWhenWhitePrisoner) {
+    FullBoard b = create_semi_filled_9x9();
+    EXPECT_EQ(1, b.get_prisoners(FastBoard::WHITE));
+    EXPECT_EQ(0, b.get_prisoners(FastBoard::BLACK));
+}
