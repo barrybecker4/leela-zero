@@ -269,13 +269,14 @@ TEST(FullBoardTest, RemoveString) {
 }
 
 TEST(FullBoardTest, CountRealLibertiesOn9x9) {
-    FullBoard b = create_semi_filled_5x5();
+    FullBoard b = create_semi_filled_9x9();
     
     EXPECT_EQ(2, b.count_pliberties(b.get_vertex(0, 0)));
-    EXPECT_EQ(2, b.count_pliberties(b.get_vertex(1, 2)));
-    EXPECT_EQ(3, b.count_pliberties(b.get_vertex(4, 3)));
-    EXPECT_EQ(2, b.count_pliberties(b.get_vertex(4, 4))); 
-    EXPECT_EQ(0, b.count_pliberties(b.get_vertex(5, 4)));
+    EXPECT_EQ(3, b.count_pliberties(b.get_vertex(1, 2)));
+    EXPECT_EQ(2, b.count_pliberties(b.get_vertex(2, 2)));
+    EXPECT_EQ(4, b.count_pliberties(b.get_vertex(4, 3)));
+    EXPECT_EQ(1, b.count_pliberties(b.get_vertex(4, 4))); 
+    EXPECT_EQ(4, b.count_pliberties(b.get_vertex(5, 4)));
 }
 
 TEST(FullBoardTest, IsSuicideWhenNotForBlack) {
