@@ -105,7 +105,6 @@ FullBoard create_5x5_all_black() {
     b.update_board(FastBoard::BLACK, b.get_vertex(0, 4));
     b.update_board(FastBoard::BLACK, b.get_vertex(2, 3));
     b.update_board(FastBoard::BLACK, b.get_vertex(2, 4));
-    b.update_board(FastBoard::BLACK, b.get_vertex(2, 4));
     b.update_board(FastBoard::BLACK, b.get_vertex(3, 2));
     b.update_board(FastBoard::BLACK, b.get_vertex(3, 4));
     b.update_board(FastBoard::BLACK, b.get_vertex(4, 3));
@@ -408,7 +407,7 @@ TEST(FullBoardTest, IsEyeOnBlackField) {
     EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(1, 1)));
     EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(2, 0)));
     EXPECT_EQ(false, b.is_eye(FastBoard::WHITE, b.get_vertex(4, 2)));
-    EXPECT_EQ(true, b.is_eye(FastBoard::BLACK, b.get_vertex(1, 4))); // should not be eye?
+    EXPECT_EQ(false, b.is_eye(FastBoard::BLACK, b.get_vertex(1, 4))); 
 }
 
 /*
