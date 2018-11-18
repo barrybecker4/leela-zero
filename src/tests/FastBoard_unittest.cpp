@@ -26,42 +26,42 @@
 FastBoard create_filled_3x3() {
     FastBoard b;
     b.reset_board(3);
-    b.set_square(1, 1, FastBoard::BLACK);
-    b.set_square(2, 1, FastBoard::BLACK);
-    b.set_square(0, 1, FastBoard::WHITE);
-    b.set_square(1, 0, FastBoard::WHITE);
-    b.set_square(2, 2, FastBoard::BLACK);
+    b.set_state(1, 1, FastBoard::BLACK);
+    b.set_state(2, 1, FastBoard::BLACK);
+    b.set_state(0, 1, FastBoard::WHITE);
+    b.set_state(1, 0, FastBoard::WHITE);
+    b.set_state(2, 2, FastBoard::BLACK);
     return b;
   }
 
 FastBoard create_filled_5x5() {
     FastBoard b;
     b.reset_board(5);
-    b.set_square(1, 1, FastBoard::BLACK);
-    b.set_square(2, 1, FastBoard::BLACK);
-    b.set_square(3, 1, FastBoard::WHITE);
-    b.set_square(2, 2, FastBoard::WHITE);
-    b.set_square(3, 2, FastBoard::BLACK);
-    b.set_square(0, 3, FastBoard::BLACK);
-    b.set_square(2, 3, FastBoard::WHITE);
-    b.set_square(2, 4, FastBoard::WHITE);
+    b.set_state(1, 1, FastBoard::BLACK);
+    b.set_state(2, 1, FastBoard::BLACK);
+    b.set_state(3, 1, FastBoard::WHITE);
+    b.set_state(2, 2, FastBoard::WHITE);
+    b.set_state(3, 2, FastBoard::BLACK);
+    b.set_state(0, 3, FastBoard::BLACK);
+    b.set_state(2, 3, FastBoard::WHITE);
+    b.set_state(2, 4, FastBoard::WHITE);
     return b;
 }
 
 FastBoard create_filled_9x9() {
     FastBoard b;
     b.reset_board(9);
-    b.set_square(5, 4, FastBoard::WHITE);
-    b.set_square(5, 3, FastBoard::BLACK);
-    b.set_square(4, 5, FastBoard::WHITE);
-    b.set_square(2, 2, FastBoard::BLACK);
-    b.set_square(4, 3, FastBoard::WHITE);
-    b.set_square(1, 2, FastBoard::BLACK);
-    b.set_square(6, 3, FastBoard::WHITE);
-    b.set_square(2, 3, FastBoard::BLACK);
-    b.set_square(5, 2, FastBoard::WHITE);
-    b.set_square(0, 0, FastBoard::BLACK);
-    b.set_square(6, 6, FastBoard::WHITE);
+    b.set_state(5, 4, FastBoard::WHITE);
+    b.set_state(5, 3, FastBoard::BLACK);
+    b.set_state(4, 5, FastBoard::WHITE);
+    b.set_state(2, 2, FastBoard::BLACK);
+    b.set_state(4, 3, FastBoard::WHITE);
+    b.set_state(1, 2, FastBoard::BLACK);
+    b.set_state(6, 3, FastBoard::WHITE);
+    b.set_state(2, 3, FastBoard::BLACK);
+    b.set_state(5, 2, FastBoard::WHITE);
+    b.set_state(0, 0, FastBoard::BLACK);
+    b.set_state(6, 6, FastBoard::WHITE);
     return b;
 }
 
@@ -77,16 +77,16 @@ FastBoard create_filled_9x9() {
 FastBoard create_5x5_all_white_field() {
     FastBoard b;
     b.reset_board(5);
-    b.set_square(1, 2, FastBoard::WHITE);
-    b.set_square(2, 1, FastBoard::WHITE);
-    b.set_square(2, 2, FastBoard::WHITE);
-    b.set_square(2, 3, FastBoard::WHITE);
-    b.set_square(2, 4, FastBoard::WHITE);
-    b.set_square(3, 2, FastBoard::WHITE);
-    b.set_square(3, 4, FastBoard::WHITE);
-    b.set_square(4, 3, FastBoard::WHITE);
-    b.set_square(0, 2, FastBoard::WHITE);
-    b.set_square(2, 0, FastBoard::WHITE);
+    b.set_state(1, 2, FastBoard::WHITE);
+    b.set_state(2, 1, FastBoard::WHITE);
+    b.set_state(2, 2, FastBoard::WHITE);
+    b.set_state(2, 3, FastBoard::WHITE);
+    b.set_state(2, 4, FastBoard::WHITE);
+    b.set_state(3, 2, FastBoard::WHITE);
+    b.set_state(3, 4, FastBoard::WHITE);
+    b.set_state(4, 3, FastBoard::WHITE);
+    b.set_state(0, 2, FastBoard::WHITE);
+    b.set_state(2, 0, FastBoard::WHITE);
     return b;
 }
 
@@ -108,7 +108,7 @@ TEST(FastBoardTest, Board3x3) {
 TEST(FastBoardTest, MakeBlackMoveOn19x19) {
     FastBoard b;
     b.reset_board(19);
-    b.set_square(b.get_vertex(2, 1), FastBoard::BLACK);
+    b.set_state(b.get_vertex(2, 1), FastBoard::BLACK);
     
     const char *expected = "\n"
         "   a b c d e f g h j k l m n o p q r s t \n"
@@ -163,12 +163,12 @@ TEST(FastBoardTest, GetXYFromVertex) {
 TEST(FastBoardTest, GetSquare) {
     FastBoard b;
     b.reset_board(19);
-    EXPECT_EQ(FastBoard::EMPTY, b.get_square(43));
-    EXPECT_EQ(FastBoard::EMPTY, b.get_square(0, 1));
-    b.set_square(43, FastBoard::BLACK);
-    EXPECT_EQ(FastBoard::BLACK, b.get_square(43));
-    b.set_square(43, FastBoard::WHITE);
-    EXPECT_EQ(FastBoard::WHITE, b.get_square(43));
+    EXPECT_EQ(FastBoard::EMPTY, b.get_state(43));
+    EXPECT_EQ(FastBoard::EMPTY, b.get_state(0, 1));
+    b.set_state(43, FastBoard::BLACK);
+    EXPECT_EQ(FastBoard::BLACK, b.get_state(43));
+    b.set_state(43, FastBoard::WHITE);
+    EXPECT_EQ(FastBoard::WHITE, b.get_state(43));
 }
 
 TEST(FastBoardTest, SemiFilled5x5Board) {
@@ -233,7 +233,7 @@ TEST(FastBoardTest, CountRealLibertiesOn9x9) {
 TEST(FastBoardTest, IsSuicideWhenNotForBlack) {
     FastBoard b;
     b.reset_board(5);  
-    b.set_square(2, 2, FastBoard::WHITE);
+    b.set_state(2, 2, FastBoard::WHITE);
     EXPECT_EQ(false, b.is_suicide(b.get_vertex(1, 1), FastBoard::BLACK));
     EXPECT_EQ(false, b.is_suicide(b.get_vertex(2, 1), FastBoard::BLACK));
 }
